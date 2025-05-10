@@ -1,5 +1,8 @@
+import torch
+import torch.nn as nn
+
 class Discriminator(nn.Module):
-    def __init__(self, nc=3, ndf=64):
+    def __init__(self, ndf=64, nc=3):
         super(Discriminator, self).__init__()
         self.main = nn.Sequential(
             # Input: (nc) x 64 x 64

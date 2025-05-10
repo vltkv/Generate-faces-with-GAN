@@ -1,7 +1,40 @@
+import torch
+import torch.nn as nn
+from models import Generator
+from models import Discriminator
+from training import OptimizerFactory
+
+nz = 100  # size of z latent vector (i.e. size of generator input)
+ngf = 64  # size of feature maps in generator
+ndf = 64  # size of feature maps in discriminator
+nc = 3  # number of channels in the training images. For color images this is 3
+num_epochs = 5
+batch_size = 128
+optimizer_type = "Adam"
+
+device = torch.device("cuda:0" if (torch.cuda.is_available()) else "cpu")
+
+def weights_init(m):
+    classname = m.__class__.__name__
+    if classname.find('Conv') != -1:
+        nn.init.normal_(m.weight.data, 0.0, 0.02)
+    elif classname.find('BatchNorm') != -1:
+        nn.init.normal_(m.weight.data, 1.0, 0.02)
+        nn.init.constant_(m.bias.data, 0)
+
 G_losses = []
 D_losses = []
 img_list = []
 iters = 0
+
+netG = Generator(nz, ngf, nc).to(device)
+netG.apply(weights_init)
+netD = Discriminator(ndf, nc).to(device)
+netD.apply(weights_init)
+
+opt_factory = OptimizerFactory(optimizer_type="adam", lr=0.0002, beta1=0.5)
+optimizerD = opt_factory.create(netD)
+optimizerG = opt_factory.create(netG)
 
 for epoch in range(num_epochs):
     for i, data in enumerate(dataloader, 0):
