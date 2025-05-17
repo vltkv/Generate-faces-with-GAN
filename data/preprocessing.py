@@ -1,7 +1,6 @@
 import os
 import logging
 import shutil
-import random
 import torch
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
@@ -71,27 +70,42 @@ def setup_kagglehub_dataset(dataroot, max_images=None):
         logger.error(f"Error setting up KaggleHub dataset: {str(e)}")
         return False
 
-def get_dataset(dataroot, image_size=64, use_kagglehub=False, max_images=None):
+def get_dataset(dataroot, image_size=64, use_kagglehub=False, max_images=None, augment=False):
     if use_kagglehub:
         success = setup_kagglehub_dataset(dataroot, max_images)
         if not success:
-            logger.error("Failed to set up KaggleHub dataset")
-            return None
+            logger.warning("Failed to set up KaggleHub dataset, checking for local data...")
     
-    if not os.path.exists(dataroot):
-        logger.error(f"Dataset directory {dataroot} does not exist")
+    dataset_path = os.path.join(dataroot, "img_align_celeba")
+    if not os.path.exists(dataset_path):
+        logger.error(f"Dataset directory {dataset_path} does not exist")
         return None
         
-    transform = transforms.Compose([
-        transforms.Resize(image_size),
-        transforms.CenterCrop(image_size),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-    ])
+    # Create transforms
+    if augment:
+        from data.augmentation import get_training_augmentation
+        transform = get_training_augmentation(image_size)
+        logger.info("Using data augmentation")
+    else:
+        transform = transforms.Compose([
+            transforms.Resize(image_size),
+            transforms.CenterCrop(image_size),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+        ])
+        logger.info("Using basic transforms")
     
     try:
         dataset = dset.ImageFolder(root=dataroot, transform=transform)
         logger.info(f"Successfully loaded dataset with {len(dataset)} images")
+        
+        if max_images is not None and max_images < len(dataset):
+            from torch.utils.data import Subset
+            import random
+            indices = random.sample(range(len(dataset)), max_images)
+            dataset = Subset(dataset, indices)
+            logger.info(f"Limited dataset to {max_images} images")
+            
         return dataset
     except Exception as e:
         logger.error(f"Error loading dataset: {str(e)}")

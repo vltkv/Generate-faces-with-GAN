@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
-import torchvision.utils as vutils
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,7 +15,7 @@ def plot_losses(G_losses, D_losses, save_path=None):
     plt.legend()
     if save_path:
         plt.savefig(save_path)
-        logger.info("Loss plot saved to {save_path}")
+        logger.info(f"Comparison image saved to {save_path}")
     plt.show()
 
 def create_progress_animation(img_list): # generator's progress
@@ -44,6 +43,6 @@ def compare_real_fake(real_batch, fake_batch, save_path=None):
     
     if save_path:
         plt.savefig(save_path)
-        logger.info("Comparison image saved to {save_path}")
+        logger.info(f"Loss plot saved to {save_path}")
     
     plt.show()

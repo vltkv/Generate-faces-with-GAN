@@ -70,7 +70,7 @@ def train_gan(dataloader, netG, netD, optimizerG, optimizerD, criterion,
             g_loss.backward()
             optimizerG.step()
             
-            # Save losses for plotting
+            # Save losses for plotting later
             G_losses.append(g_loss.item())
             D_losses.append(d_loss.item())
             

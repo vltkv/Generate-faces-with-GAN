@@ -1,18 +1,19 @@
 import torch
 import random
-import numpy as np
 import argparse
 import os
 import logging
 
 from data.preprocessing import get_dataset, create_dataloader
-from models.generator import Generator, weights_init
+from models.generator import Generator
 from models.discriminator import Discriminator
+from models.utils import weights_init
 from training.optimizers import get_optimizers
 from training.loss_functions import get_criterion, discriminator_loss, generator_loss
 from training.training import train_gan
 from evaluation.visualization import plot_losses, compare_real_fake
 import torchvision.utils as vutils
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -35,6 +36,7 @@ def main():
     parser.add_argument('--output_dir', type=str, default='results', help='directory to save results')
     parser.add_argument('--use_kagglehub', action='store_true', help='download dataset from KaggleHub')
     parser.add_argument('--max_images', type=int, default=200000, help='maximum number of images to use (KaggleHub only)')
+    parser.add_argument('--augment', action='store_true', help='apply data augmentation')
     opt = parser.parse_args()
     
     # output directory
@@ -49,7 +51,7 @@ def main():
     
     # Decide which device to run on
     device = torch.device("cuda:0" if (torch.cuda.is_available() and opt.ngpu > 0) else "cpu")
-    logger.info("Using device: {device}")
+    logger.info(f"Using device: {device}")
     
     # Create dataset and dataloader
     logger.info("Setting up dataset...")
@@ -57,7 +59,8 @@ def main():
         opt.dataroot, 
         opt.image_size, 
         use_kagglehub=opt.use_kagglehub,
-        max_images=opt.max_images
+        max_images=opt.max_images,
+        augment=opt.augment
     )
     
     if dataset is None:
@@ -71,8 +74,8 @@ def main():
         return
     
     logger.info("Creating models...")
-    netG = Generator(opt.nz, opt.ngf, opt.nc, opt.ngpu).to(device)
-    netD = Discriminator(opt.nc, opt.ndf, opt.ngpu).to(device)
+    netG = Generator(opt.nz, opt.ngf, opt.nc).to(device)
+    netD = Discriminator(opt.ndf, opt.nc).to(device)
     
     # multi-GPU
     if (device.type == 'cuda') and (opt.ngpu > 1):
@@ -104,19 +107,19 @@ def main():
     
     # Visualize results
     logger.info("Generating visualizations...")
-    plot_losses(G_losses, D_losses, save_path="{opt.output_dir}/loss_plot.png")
+    plot_losses(G_losses, D_losses, save_path=f"{opt.output_dir}/loss_plot.png")
     
     # Get a batch of real images
     real_batch = next(iter(dataloader))
     real_images = vutils.make_grid(real_batch[0][:64], padding=5, normalize=True)
     
     # Compare with generated images
-    compare_real_fake(real_images, img_list[-1], "{opt.output_dir}/comparison.png")
+    compare_real_fake(real_images, img_list[-1], save_path=f"{opt.output_dir}/comparison.png")
     
     # Save the models
     logger.info("Saving models...")
-    torch.save(netG.state_dict(), "{opt.output_dir}/generator.pth")
-    torch.save(netD.state_dict(), "{opt.output_dir}/discriminator.pth")
+    torch.save(netG.state_dict(), f"{opt.output_dir}/generator.pth")
+    torch.save(netD.state_dict(), f"{opt.output_dir}/discriminator.pth")
     
     logger.info("Training complete! Models saved.")
     
