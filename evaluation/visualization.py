@@ -77,7 +77,9 @@ def compute_fid_is(real_images, fake_images, device='cuda'):
     fid.update(real_resized, real=True)
     fid.update(fake_resized, real=False)
     fid_score = fid.compute().item()
-
+    
+    # TODO:  Metric `InceptionScore` will save all extracted features in buffer. For large datasets this may lead to large memory footprint.
+    #        Obie metryki puścić na wybranych próbkach danych
     # IS
     inception = InceptionScore(normalize=True).to(device)
     inception.update(fake_resized)

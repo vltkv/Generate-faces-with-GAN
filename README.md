@@ -33,6 +33,20 @@ Tworzenie realistycznych wizerunków osób, które nie istnieją w rzeczywistoś
 ## Diagram przypadków użycia – diagram sekwencji
 ## Podział prac w projekcie
 ## Etapy wykonania projektu
+| Etap | Data       | Nazwa elementu projektu                                                                 | Odpowiedzialna   |
+|------|------------|-----------------------------------------------------------------------------------------|----------------------|
+| I    | 05.03.2025 | Research na temat GANów, wybór podejścia (DCGAN)                                      | Alicja Wojciechowska, Weronika Żygis |
+| II   | 10.04.2025 | Wybór zbioru danych i preprocessing                                                   | Alicja Wojciechowska |
+| III  | 20.04.2025 | Szkic architektury sieci                                                              | Weronika Żygis       |
+| IV   | 05.05.2025 | Implementacja generatora i dyskryminatora.                                            | Alicja Wojciechowska |
+|      |            | Konfiguracja treningu modelu                                                          | Weronika Żygis       |
+| V    | 08.05.2025 | Wybór funkcji strat dla generatora i dyskryminatora (loss functions)                  | Weronika Żygis       |
+|      |            | Wybór optymalizatora (ADAM)                                                           | Alicja Wojciechowska |
+| VI   | 10.05.2025 | Uczenie modelu. Śledzenie metryk (porównywanie loss dla generatora i dyskryminatora)  | Weronika Żygis       |
+| VII  | 13.05.2025 | Wizualizacja wyników. Wprowadzenie augmentacji i dodanie nowego podejścia – WGAN      | Weronika Żygis       |
+| VIII | 16.05.2025 | Ewaluacja i analiza wyników (FID, IS)                                                 | Alicja Wojciechowska |
+| IX   | 20.05.2025 | Dokumentacja projektu                                                                 | Alicja Wojciechowska, Weronika Żygis |
+
 
 # Projekt architektury
 
