@@ -5,6 +5,9 @@ import torch
 import os
 import logging
 from datetime import datetime
+from torchmetrics.image.fid import FrechetInceptionDistance
+from torchmetrics.image.inception import InceptionScore
+from torchvision.transforms import Resize, CenterCrop
 
 logger = logging.getLogger(__name__)
 
@@ -92,3 +95,42 @@ def compare_real_fake(real_batch, fake_batch, save_path=None, num_images=64):
         print("="*70 + "\n")
     
     return save_path
+
+def compute_fid_is(real_images, fake_images, device='cuda'):
+    """Compute FID and IS metrics for a batch of real and generated images."""
+    assert isinstance(real_images, torch.Tensor) and isinstance(fake_images, torch.Tensor)
+    
+    # Resize to 299x299 for InceptionV3
+    transform = torch.nn.Sequential(
+        Resize(299),
+        CenterCrop(299)
+    ).to(device)
+
+    real_resized = transform(real_images.to(device))
+    fake_resized = transform(fake_images.to(device))
+
+    # FID
+    fid = FrechetInceptionDistance(normalize=True).to(device)
+    fid.update(real_resized, real=True)
+    fid.update(fake_resized, real=False)
+    fid_score = fid.compute().item()
+
+    # IS
+    inception = InceptionScore(normalize=True).to(device)
+    inception.update(fake_resized)
+    is_mean, is_std = inception.compute()
+    is_mean = is_mean.item()
+    is_std = is_std.item()
+
+    print("\n" + "="*70)
+    print("FID & IS METRICS")
+    print("-"*70)
+    print(f"✓ FID Score: {fid_score:.4f} (lower is better)")
+    print(f"✓ Inception Score: {is_mean:.4f} ± {is_std:.4f} (higher is better)")
+    print("="*70 + "\n")
+
+    return {
+        "fid": fid_score,
+        "is_mean": is_mean,
+        "is_std": is_std
+    }
