@@ -14,7 +14,9 @@ Trening przeprowadzono na zbiorze danych CelebFaces Attributes Dataset (CelebA),
 ### Założenia:
 - Zastosowanie konwolucyjnych i transponowanych warstw konwolucyjnych w dyskryminatorze i generatorze.
 - Użycie funkcji aktywacji ReLU (w generatorze) oraz LeakyReLU (w dyskryminatorze) dla lepszej propagacji gradientów.
-- Normalizacja wsadowa (batch normalization) w celu stabilizacji procesu uczenia.  
+- Normalizacja wsadowa (batch normalization) w celu stabilizacji procesu uczenia.
+
+### Cele projektowe:
 
 ### Funkcje:
 - Trening modelu DCGAN na zbiorze danych CelebA.
@@ -25,13 +27,22 @@ Trening przeprowadzono na zbiorze danych CelebFaces Attributes Dataset (CelebA),
 ### Przewidywane przeznaczenie:
 Tworzenie realistycznych wizerunków osób, które nie istnieją w rzeczywistości — np. do zastosowań w grach komputerowych, filmach, reklamach, sztuce cyfrowej czy testowaniu systemów rozpoznawania twarzy.
 
+# Analiza systemowa
+
+## Przypadki użycia
+## Diagram przypadków użycia – diagram sekwencji
+## Podział prac w projekcie
+## Etapy wykonania projektu
+
+# Projekt architektury
+
 ## Wybór technologii informatycznych
 - PyTorch 
 - NumPy
 - Kaggle Api
 - Google Colab - przyspieszenie trenowania dzięki wsparciu GPU.
 
-## Projekt architektury aplikacji z uzasadnieniem wyboru technologii
+## Projekt architektury aplikacji
 Projekt składa się z dwóch odrębnych modeli: generatora i dyskryminatora. Zadaniem generatora jest tworzenie fałszywych obrazów, które wyglądają jak obrazy z danych treningowych. Z kolei zadaniem dyskryminatora jest ocena obrazu i określenie, czy pochodzi on z prawdziwego zbioru treningowego, czy został wygenerowany przez generator.
 
 Podczas treningu generator nieustannie stara się przechytrzyć dyskryminatora, generując coraz bardziej realistyczne obrazy. Jednocześnie dyskryminator doskonali się w rozróżnianiu prawdziwych i fałszywych obrazów. Proces ten ma charakter rywalizacji. Równowaga tej „gry” zostaje osiągnięta wtedy, gdy generator tworzy tak realistyczne obrazy, że dyskryminator nie potrafi już ich odróżnić od prawdziwych — i zmuszony jest zgadywać z 50% pewnością, czy dany obraz jest prawdziwy, czy fałszywy.
@@ -46,5 +57,12 @@ W projekcie wykorzystujemy DCGAN:
 
 ## Projekt bazy danych (użyte tabele w przypadku relacyjnych baz danych)
 Nie dotyczy – projekt nie korzysta z klasycznej relacyjnej bazy danych. Dane wejściowe (obrazy) są przechowywane jako pliki w systemie plików.
+
+## Przypadki użycia w modułach
+## Projekt API backendu
+## Diagram klas
+
+# Implementacja i testowanie aplikacji z użyciem wybranego narzędzia do projektowania zespołowego
+
 
   
