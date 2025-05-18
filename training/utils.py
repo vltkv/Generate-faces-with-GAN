@@ -4,17 +4,12 @@ import logging
 import torchvision.utils as vutils
 import matplotlib.pyplot as plt
 from datetime import datetime
-from evaluation.visualization import plot_losses, compute_fid_is
+from evaluation.visualization import plot_losses, compare_real_fake, compute_fid_is
 
 logger = logging.getLogger(__name__)
 
 def weights_init(m):
-    """
-    Custom weights initialization called on generator and discriminator networks
-    
-    Args:
-        m: Module to initialize
-    """
+    """Custom weights initialization called on generator and discriminator networks"""
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
         torch.nn.init.normal_(m.weight.data, 0.0, 0.02)
@@ -25,38 +20,17 @@ def weights_init(m):
 def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, netD, args):
     logger.info("Saving training results...")
     
+    real_dir = os.path.join(output_dir, "individual_real")
+    fake_dir = os.path.join(output_dir, "individual_fake")
     # Create output directories
     os.makedirs(output_dir, exist_ok=True)
-    os.makedirs(os.path.join(output_dir, "individual_real"), exist_ok=True)
-    os.makedirs(os.path.join(output_dir, "individual_fake"), exist_ok=True)
+    os.makedirs(real_dir, exist_ok=True)
+    os.makedirs(fake_dir, exist_ok=True)
     
     # Save loss plot
     plot_losses(G_losses, D_losses, save_path=os.path.join(output_dir, "loss_plot.png"))
     
-    # Create comparison grid
-    real_grid = vutils.make_grid(real_batch[0][:64], padding=5, normalize=True)
-    fake_grid = img_list[-1]
-    
-    plt.figure(figsize=(15, 8))
-    
-    # Real images
-    plt.subplot(1, 2, 1)
-    plt.axis("off")
-    plt.title("Real Images", fontsize=14)
-    plt.imshow(torch.permute(real_grid, (1, 2, 0)).cpu().numpy())
-    
-    # Fake images
-    plt.subplot(1, 2, 2)
-    plt.axis("off")
-    plt.title("Generated Images", fontsize=14)
-    plt.imshow(torch.permute(fake_grid, (1, 2, 0)).cpu().numpy())
-    
-    # Add timestamp
-    plt.figtext(0.5, 0.01, f"Generated on {datetime.now().strftime('%Y-%m-%d %H:%M')}", 
-                ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5})
-    
-    plt.savefig(f"{output_dir}/comparison.png", bbox_inches='tight')
-    plt.close()
+    compare_real_fake(real_batch, img_list)
     
     # Save individual real images
     for i in range(min(64, real_batch[0].size(0))):
@@ -78,7 +52,6 @@ def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, net
                 f"{output_dir}/individual_fake/generated_{i+1}.png",
                 normalize=True
             )
-            
     
     # Save trained models
     torch.save(netG.state_dict(), f"{output_dir}/generator.pth")
@@ -113,8 +86,8 @@ def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, net
         f.write("---------------\n")
         f.write(f"Loss Plot: {os.path.join(output_dir, 'loss_plot.png')}\n")
         f.write(f"Comparison Grid: {os.path.join(output_dir, 'comparison.png')}\n")
-        f.write(f"Individual Real Images: {os.path.join(output_dir, 'individual_real')} (64 images)\n")
-        f.write(f"Individual Generated Images: {os.path.join(output_dir, 'individual_fake')} (64 images)\n")
+        f.write(f"Individual Real Images: {real_dir} (64 images)\n")
+        f.write(f"Individual Generated Images: {fake_dir} (64 images)\n")
         f.write(f"Generator Model: {os.path.join(output_dir, 'generator.pth')}\n")
         f.write(f"Discriminator Model: {os.path.join(output_dir, 'discriminator.pth')}\n")
     
@@ -123,8 +96,8 @@ def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, net
     print("-"*70)
     print(f"✓ Loss plot: {os.path.join(output_dir, 'loss_plot.png')}")
     print(f"✓ Comparison of real vs generated: {os.path.join(output_dir, 'comparison.png')}")
-    print(f"✓ Individual real images: {os.path.join(output_dir, 'individual_real')} (64 images)")
-    print(f"✓ Individual generated images: {os.path.join(output_dir, 'individual_fake')} (64 images)")
+    print(f"✓ Individual real images: {real_dir} (64 images)")
+    print(f"✓ Individual generated images: {fake_dir} (64 images)")
     print(f"✓ Trained models: {os.path.join(output_dir, 'generator.pth')} and {os.path.join(output_dir, 'discriminator.pth')}")
     print(f"✓ Summary report: {os.path.join(output_dir, 'results_summary.txt')}")
     print("="*70 + "\n")

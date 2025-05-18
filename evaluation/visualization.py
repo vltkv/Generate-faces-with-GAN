@@ -31,29 +31,25 @@ def plot_losses(G_losses, D_losses, save_path=None):
     plt.close()
     return save_path
 
-def compare_real_fake(real_batch, fake_batch, save_path=None, num_images=64):
+def compare_real_fake(real_batch, img_list, save_path=None, num_images=64):
     """Create detailed comparison between real and generated images and save individual images"""
+    # Create comparison grid
+    real_grid = vutils.make_grid(real_batch[0][:64], padding=5, normalize=True)
+    fake_grid = img_list[-1]
+    
     plt.figure(figsize=(15, 8))
     
     # Real images
     plt.subplot(1, 2, 1)
     plt.axis("off")
     plt.title("Real Images", fontsize=14)
-    if isinstance(real_batch, torch.Tensor) and real_batch.dim() == 4:
-        real_grid = vutils.make_grid(real_batch, padding=2, normalize=True)
-        plt.imshow(np.transpose(real_grid, (1, 2, 0)))
-    else:
-        plt.imshow(np.transpose(real_batch, (1, 2, 0)))
+    plt.imshow(torch.permute(real_grid, (1, 2, 0)).cpu().numpy())
     
     # Fake images
     plt.subplot(1, 2, 2)
     plt.axis("off")
     plt.title("Generated Images", fontsize=14)
-    if isinstance(fake_batch, torch.Tensor) and fake_batch.dim() == 4:
-        fake_grid = vutils.make_grid(fake_batch, padding=2, normalize=True)
-        plt.imshow(np.transpose(fake_grid, (1, 2, 0)))
-    else:
-        plt.imshow(np.transpose(fake_batch, (1, 2, 0)))
+    plt.imshow(torch.permute(fake_grid, (1, 2, 0)).cpu().numpy())
     
     # Add timestamp
     plt.figtext(0.5, 0.01, f"Generated on {datetime.now().strftime('%Y-%m-%d %H:%M')}", 
@@ -61,39 +57,10 @@ def compare_real_fake(real_batch, fake_batch, save_path=None, num_images=64):
     
     if save_path:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        plt.savefig(save_path, bbox_inches='tight')
+        plt.savefig(f"{save_path}/comparison.png", bbox_inches='tight')
         logger.info(f"Comparison image saved to {save_path}")
     
     plt.close()
-    
-    # Save individual images
-    if save_path:
-        save_dir = os.path.dirname(save_path)
-        
-        real_dir = os.path.join(save_dir, 'individual_real')
-        fake_dir = os.path.join(save_dir, 'individual_fake')
-        os.makedirs(real_dir, exist_ok=True)
-        os.makedirs(fake_dir, exist_ok=True)
-        
-        if isinstance(real_batch, torch.Tensor) and real_batch.dim() == 4:
-            for i in range(min(num_images, real_batch.size(0))):
-                img = real_batch[i].detach().cpu()
-                vutils.save_image(img, os.path.join(real_dir, f'real_{i+1}.png'), normalize=True)
-        
-        if isinstance(fake_batch, torch.Tensor) and fake_batch.dim() == 4:
-            for i in range(min(num_images, fake_batch.size(0))):
-                img = fake_batch[i].detach().cpu()
-                vutils.save_image(img, os.path.join(fake_dir, f'generated_{i+1}.png'), normalize=True)
-        
-        logger.info(f"Individual images saved to {real_dir} and {fake_dir}")
-        
-        print("\n" + "="*70)
-        print(f"RESULTS SAVED SUCCESSFULLY")
-        print("-"*70)
-        print(f"✓ Comparison image: {save_path}")
-        print(f"✓ Individual real images: {real_dir}")
-        print(f"✓ Individual generated images: {fake_dir}")
-        print("="*70 + "\n")
     
     return save_path
 
