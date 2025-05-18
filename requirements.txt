@@ -5,3 +5,4 @@ matplotlib>=3.3.2
 tqdm>=4.50.2
 pillow>=8.0.1
 kagglehub>=0.2.0
+torchmetrics>=0.8.0
