@@ -4,6 +4,7 @@ import logging
 import torchvision.utils as vutils
 import matplotlib.pyplot as plt
 from datetime import datetime
+from evaluation.visualization import plot_losses, compute_fid_is
 
 logger = logging.getLogger(__name__)
 
@@ -30,16 +31,7 @@ def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, net
     os.makedirs(os.path.join(output_dir, "individual_fake"), exist_ok=True)
     
     # Save loss plot
-    plt.figure(figsize=(10, 5))
-    plt.title("Generator and Discriminator Loss During Training")
-    plt.plot(G_losses, label="Generator", color='#1f77b4')
-    plt.plot(D_losses, label="Discriminator", color='#ff7f0e')
-    plt.xlabel("Iterations")
-    plt.ylabel("Loss")
-    plt.legend()
-    plt.grid(alpha=0.3)
-    plt.savefig(f"{output_dir}/loss_plot.png")
-    plt.close()
+    plot_losses(G_losses, D_losses, save_path=os.path.join(output_dir, "loss_plot.png"))
     
     # Create comparison grid
     real_grid = vutils.make_grid(real_batch[0][:64], padding=5, normalize=True)
@@ -86,6 +78,7 @@ def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, net
                 f"{output_dir}/individual_fake/generated_{i+1}.png",
                 normalize=True
             )
+            
     
     # Save trained models
     torch.save(netG.state_dict(), f"{output_dir}/generator.pth")
@@ -107,6 +100,14 @@ def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, net
         f.write(f"Final Generator Loss: {G_losses[-1]:.4f}\n")
         f.write(f"Final Discriminator Loss: {D_losses[-1]:.4f}\n")
         f.write("\n")
+                
+        f.write(
+            compute_fid_is(
+                real_batch[0].to(next(netG.parameters()).device),
+                fake_batch,
+                device=next(netG.parameters()).device
+            )
+        )
         
         f.write("RESULTS LOCATION\n")
         f.write("---------------\n")
