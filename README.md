@@ -11,8 +11,10 @@
 ### Cele projektowe:
 Celem projektu jest stworzenie modelu opartego na sieci generatywnej GAN (Generative Adversarial Network), któego zadaniem jest generowanie syntetycznych obrazów twarzy o wysokiej jakości.
 
+WGAN, czyli Wasserstein GAN, to wariant klasycznego GAN-a (Generative Adversarial Network), który poprawia stabilność trenowania i jakość generowanych danych poprzez zmianę sposobu, w jaki mierzona jest odległość między rozkładami danych rzeczywistych i generowanych.
+
 Główne cele:
-- Implementacja modelu bazując na architekturze DCGAN, która łączy klasyczne założenia GAN-ów z sieciami konwolucyjnymi, co pozwala uzyskać lepsze rezultaty w kontekście generowania obrazów.
+- Implementacja modelu bazując na architekturze DCGAN (Deep Convolutional GAN), która łączy klasyczne założenia GAN-ów z sieciami konwolucyjnymi, oraz WGAN (Wasserstein GAN), która poprawia stabilność trenowania poprzez zmianę sposobu w jaki mierzona jest odległość między rozkładami danych rzeczywistych i generowanych.
 - Trening modelu na realistycznych danych. W tym celu wykorzystano zbiór danych CelebFaces Attributes Dataset (CelebA), zawierający tysiące zdjęć twarzy celebrytów o dużej różnorodności cech wizualnych, takich jak wiek, płeć, fryzura czy wyraz twarzy.
 - Ewaluacja jakości syntetycznych obrazów przy pomocy metryk FID i IS.
 - Zapisywanie wyników i modeli do ponownego użycia. Generowanie przykładowych twarzy oraz tworzenie raportów z treningu.
@@ -33,10 +35,9 @@ Tworzenie realistycznych anonimowych wizerunków twarzy bez naruszania prywatno�
 
 # Analiza systemowa
 
-## Przypadki użycia
 ## Diagram czynności
 ![Diagram czynności](docs/diagrams/activity_diagram.png)
-## Diagram przypadków użycia – diagram sekwencji
+## Diagram sekwencji
 ![Diagram sekwencji](docs/diagrams/sequence_diagram.png)
 ## Podział prac i etapy wykonania projektu
 | Etap | Data       | Nazwa elementu projektu                                                              | Odpowiedzialna                       |
@@ -61,10 +62,12 @@ Tworzenie realistycznych anonimowych wizerunków twarzy bez naruszania prywatno�
 - Normalizacja wsadowa (batch normalization) w celu stabilizacji procesu uczenia.
 
 ## Wybór technologii informatycznych
-- PyTorch 
-- NumPy
-- Kaggle Api
-- Google Colab - przyspieszenie trenowania dzięki wsparciu GPU.
+- **PyTorch** - biblioteka wykorzystywana do tworzenia i trenowania sieci neuronowych (zarówno GAN i jej odmiany). Obsługuje zarówno CPU, jak i GPU (CUDA), co pozwala na przyspieszenie procesu uczenia. Umożliwia łatwe budowanie modeli, trenowanie ich i manipulowanie gradientami.
+- **Torchmetrics** - biblioteka służąca do obliczania metryk jakości generowanych obrazów (FID, IS). Ułatwia walidację modeli podczas i po zakończeniu treningu.
+- **Torchvision** - rozszerzenie PyTorch zawierające narzędzia do wczytywania i transformacji obrazów, pomocniczne funckje do wizualizacji wyników (np. make_grid).
+- **NumPy** - główna bibliotek do obliczeń numerycnzych w Pythonie. Pozwala na operacje na macierzach, konwersję danych i przygotowywanie statystyk pomocnicznych.
+- **Matplotlib** - narzędzie do wizualizacji danych. Rysowanie wykresów strat (loss) generatora i dyskryminatora w czasie. Podgląd jakości generowanych obrazów w różnych etapach treningów.
+- **KaggleHub** - pozwala na łatwe pobieranie modeli i danych z repozytoriów Kaggle.
 
 ## Projekt architektury aplikacji
 Projekt składa się z dwóch odrębnych modeli: generatora i dyskryminatora. Zadaniem generatora jest tworzenie fałszywych obrazów, które wyglądają jak obrazy z danych treningowych. Z kolei zadaniem dyskryminatora jest ocena obrazu i określenie, czy pochodzi on z prawdziwego zbioru treningowego, czy został wygenerowany przez generator.

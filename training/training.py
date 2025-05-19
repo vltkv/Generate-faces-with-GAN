@@ -3,6 +3,7 @@ import time
 from tqdm import tqdm
 import logging
 from training.loss_functions import discriminator_loss, generator_loss
+from torchvision.utils import make_grid
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -84,7 +85,6 @@ def train_gan(dataloader, netG, netD, optimizerG, optimizerD, criterion,
             if (iters % save_interval == 0) or ((epoch == num_epochs-1) and (i == len(dataloader)-1)):
                 with torch.no_grad():
                     fake = netG(fixed_noise).detach().cpu()
-                from torchvision.utils import make_grid
                 img_list.append(make_grid(fake, padding=2, normalize=True))
             
             iters += 1
