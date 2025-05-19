@@ -1,3 +1,5 @@
+import random
+import lpips
 import matplotlib.pyplot as plt
 import numpy as np
 import torchvision.utils as vutils
@@ -8,6 +10,7 @@ import torch.nn.functional as F
 from datetime import datetime
 from torchmetrics.image.fid import FrechetInceptionDistance
 from torchmetrics.image.inception import InceptionScore
+from pytorch_msssim import ms_ssim
 from torchvision.transforms import Resize, CenterCrop
 
 logger = logging.getLogger(__name__)
@@ -77,23 +80,54 @@ def compute_fid_is(real_images, fake_images, device='cuda'):
     fid.update(real_resized, real=True)
     fid.update(fake_resized, real=False)
     fid_score = fid.compute().item()
-    
-    # TODO:  Metric `InceptionScore` will save all extracted features in buffer. For large datasets this may lead to large memory footprint.
-    #        Obie metryki puścić na wybranych próbkach danych
+
     # IS
     inception = InceptionScore(normalize=True).to(device)
     inception.update(fake_resized)
     is_mean, is_std = inception.compute()
     is_mean = is_mean.item()
     is_std = is_std.item()
+    
+    # Prepare images for MS-SSIM metric:
+    # MS-SSIM expects images resized to 256x256 (or any fixed size) and values in [0,1]
+    fake_for_ssim = F.interpolate(fake_images.to(device), size=(256, 256), mode='bilinear', align_corners=False)
+
+    # Compute average MS-SSIM over a number of random pairs of generated images
+    n_pairs = 100
+    ms_ssim_scores = []
+    for _ in range(n_pairs):
+        # Randomly sample two different indices from the batch
+        i, j = random.sample(range(fake_for_ssim.size(0)), 2)
+        img1 = fake_for_ssim[i].unsqueeze(0)  # Add batch dimension
+        img2 = fake_for_ssim[j].unsqueeze(0)
+        score = ms_ssim(img1, img2, data_range=1.0).item()
+        ms_ssim_scores.append(score)
+    ms_ssim_avg = sum(ms_ssim_scores) / n_pairs  # Average MS-SSIM; lower means more diversity
+
+    # Initialize LPIPS model to measure perceptual similarity/differences
+    loss_fn = lpips.LPIPS(net='alex').to(device)
+    # LPIPS expects images in [-1,1] range, so scale accordingly
+    fake_for_lpips = (fake_for_ssim * 2) - 1
+
+    # Compute average LPIPS over the same number of random pairs as MS-SSIM
+    lpips_scores = []
+    for _ in range(n_pairs):
+        i, j = random.sample(range(fake_for_lpips.size(0)), 2)
+        img1 = fake_for_lpips[i].unsqueeze(0)
+        img2 = fake_for_lpips[j].unsqueeze(0)
+        with torch.no_grad():
+            dist = loss_fn(img1, img2).item()
+        lpips_scores.append(dist)
+    lpips_avg = sum(lpips_scores) / n_pairs  # Higher LPIPS indicates greater perceptual diversity
 
     # Prepare result string
     results = (
-        "FID & IS METRICS\n"
-        + "--------------\n"
-        + f"FID Score: {fid_score:.4f} (lower is better)\n"
-        + f"Inception Score: {is_mean:.4f} ± {is_std:.4f} (higher is better)\n"
-        + "\n"
+        "MODEL EVALUATION METRICS\n"
+        "------------------------\n"
+        f"FID Score: {fid_score:.4f} (lower is better)\n"
+        f"Inception Score: {is_mean:.4f} ± {is_std:.4f} (higher is better)\n"
+        f"MS-SSIM (avg over {n_pairs} pairs): {ms_ssim_avg:.4f} (lower = more diversity)\n"
+        f"LPIPS (avg over {n_pairs} pairs): {lpips_avg:.4f} (higher = more diversity)\n\n"
     )
 
     return results
