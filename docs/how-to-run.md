@@ -58,7 +58,7 @@ Można dostosować proces uczenia przy użyciu następujących flag:
 | `--output_dir` | string | 'results' | Katalog do zapisywania wyników |
 | `--use_kagglehub` | bool | False | Pobieranie zbioru danych z KaggleHub |
 | `--max_images` | int | 200000 | Maksymalna liczba obrazów do użycia (tylko dla KaggleHub) |
-| `--augment` | bool | False | Zastosowanie augmentacji danych |
+| `--augment` | bool | True | Zastosowanie augmentacji danych |
 | `--wgan` | bool | False | Użycie Wasserstein GAN zamiast standardowego GAN |
 
 ### Przykłady użycia
