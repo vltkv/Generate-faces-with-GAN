@@ -90,9 +90,11 @@ Nie dotyczy – projekt nie korzysta z klasycznej relacyjnej bazy danych. Dane w
 ## Diagram klas
 ![Diagram klas](docs/diagrams/class_diagram.png)
 
-# Implementacja i testowanie aplikacji z użyciem wybranego narzędzia do projektowania zespołowego
-W ramach zespołowego podejścia do projektowania i wdrażania modelu generatywnego (DCGAN), wykorzystano narzędzia wspierające współpracę programistyczną, takie jak Git i GitHub, co umożliwiło śledzenie zmian, przypisywanie zadań i wspólne rozwijanie kodu. 
+## Użycie narzędzi do programowania zespołowego
+W ramach zespołowego podejścia do projektowania i wdrażania modelu generatywnego (DCGAN) wykorzystano narzędzia wspierające współpracę programistyczną, takie jak Git i GitHub, co umożliwiło śledzenie zmian, przypisywanie zadań oraz wspólne rozwijanie kodu. Dodatkowo, w celu skutecznego zarządzania pracą zespołu, zastosowano metodę Kanban, która umożliwiła przejrzyste planowanie, monitorowanie postępów oraz elastyczne reagowanie na napotykane trudności.
 
+# Ewaluacja wyników
+## Metryki
 Po ukończeniu implementacji przystąpiono do testowania i oceny jakości generowanych obrazów. W tym celu zastosowano trzy metryki:
 
 1. FID (Fréchet Inception Distance)
