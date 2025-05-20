@@ -30,7 +30,7 @@ def main():
     parser.add_argument('--output_dir', type=str, default='results', help='directory to save results')
     parser.add_argument('--use_kagglehub', action='store_true', help='download dataset from KaggleHub')
     parser.add_argument('--max_images', type=int, default=200000, help='maximum number of images to use (KaggleHub only)')
-    parser.add_argument('--augment', action='store_true', help='apply data augmentation')
+    parser.add_argument('--augment', action='store_false', help='apply data augmentation')
     parser.add_argument('--wgan', action='store_true', help='use Wasserstein GAN')
     opt = parser.parse_args()
     
