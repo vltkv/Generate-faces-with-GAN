@@ -6,3 +6,5 @@ tqdm>=4.50.2
 pillow>=8.0.1
 kagglehub>=0.2.0
 torchmetrics>=0.8.0
+lpips>=0.1.4
+pytorch-msssim>=1.0.0
