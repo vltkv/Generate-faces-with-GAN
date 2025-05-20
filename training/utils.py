@@ -30,7 +30,7 @@ def save_results(G_losses, D_losses, real_batch, img_list, output_dir, netG, net
     # Save loss plot
     plot_losses(G_losses, D_losses, save_path=os.path.join(output_dir, "loss_plot.png"))
     
-    compare_real_fake(real_batch, img_list)
+    compare_real_fake(real_batch, img_list, save_path=output_dir)
     
     # Save individual real images
     for i in range(min(64, real_batch[0].size(0))):

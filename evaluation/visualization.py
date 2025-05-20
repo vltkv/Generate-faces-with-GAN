@@ -59,9 +59,10 @@ def compare_real_fake(real_batch, img_list, save_path=None, num_images=64):
                 ha="center", fontsize=10, bbox={"facecolor":"white", "alpha":0.5, "pad":5})
     
     if save_path:
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        plt.savefig(f"{save_path}/comparison.png", bbox_inches='tight')
-        logger.info(f"Comparison image saved to {save_path}")
+        os.makedirs(save_path, exist_ok=True)
+        comparison_path = os.path.join(save_path, "comparison.png")
+        plt.savefig(comparison_path, bbox_inches='tight')
+        logger.info(f"Comparison image saved to {comparison_path}")
     
     plt.close()
     
