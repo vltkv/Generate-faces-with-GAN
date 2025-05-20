@@ -51,7 +51,7 @@ Tworzenie realistycznych anonimowych wizerunków twarzy bez naruszania prywatno�
 |      |            | Wybór optymalizatora (ADAM)                                                          | Alicja Wojciechowska                 |
 | VI   | 10.05.2025 | Uczenie modelu. Śledzenie metryk (porównywanie loss dla generatora i dyskryminatora) | Weronika Żygis                       |
 | VII  | 13.05.2025 | Wizualizacja wyników. Wprowadzenie augmentacji i dodanie nowego podejścia – WGAN     | Weronika Żygis                       |
-| VIII | 16.05.2025 | Ewaluacja i analiza wyników (FID, IS)                                                | Alicja Wojciechowska                 |
+| VIII | 16.05.2025 | Ewaluacja i analiza wyników                                                          | Alicja Wojciechowska                 |
 | IX   | 19.05.2025 | Dokumentacja projektu                                                                | Alicja Wojciechowska, Weronika Żygis |
 
 
@@ -63,7 +63,7 @@ Tworzenie realistycznych anonimowych wizerunków twarzy bez naruszania prywatno�
 
 ## Wybór technologii informatycznych
 - **PyTorch** - biblioteka wykorzystywana do tworzenia i trenowania sieci neuronowych (zarówno GAN i jej odmiany). Obsługuje zarówno CPU, jak i GPU (CUDA), co pozwala na przyspieszenie procesu uczenia. Umożliwia łatwe budowanie modeli, trenowanie ich i manipulowanie gradientami.
-- **Torchmetrics** - biblioteka służąca do obliczania metryk jakości generowanych obrazów (FID, IS). Ułatwia walidację modeli podczas i po zakończeniu treningu.
+- **Torchmetrics** - biblioteka służąca do obliczania metryk jakości generowanych obrazów (FID, IS, MS-SSIM). Ułatwia walidację modeli podczas i po zakończeniu treningu.
 - **Torchvision** - rozszerzenie PyTorch zawierające narzędzia do wczytywania i transformacji obrazów, pomocniczne funckje do wizualizacji wyników (np. make_grid).
 - **NumPy** - główna bibliotek do obliczeń numerycnzych w Pythonie. Pozwala na operacje na macierzach, konwersję danych i przygotowywanie statystyk pomocnicznych.
 - **Matplotlib** - narzędzie do wizualizacji danych. Rysowanie wykresów strat (loss) generatora i dyskryminatora w czasie. Podgląd jakości generowanych obrazów w różnych etapach treningów.
@@ -93,7 +93,7 @@ Nie dotyczy – projekt nie korzysta z klasycznej relacyjnej bazy danych. Dane w
 # Implementacja i testowanie aplikacji z użyciem wybranego narzędzia do projektowania zespołowego
 W ramach zespołowego podejścia do projektowania i wdrażania modelu generatywnego (DCGAN), wykorzystano narzędzia wspierające współpracę programistyczną, takie jak Git i GitHub, co umożliwiło śledzenie zmian, przypisywanie zadań i wspólne rozwijanie kodu. 
 
-Po ukończeniu implementacji przystąpiono do testowania i oceny jakości generowanych obrazów. W tym celu zastosowano dwie powszechnie uznawane metryki:
+Po ukończeniu implementacji przystąpiono do testowania i oceny jakości generowanych obrazów. W tym celu zastosowano trzy metryki:
 
 1. FID (Fréchet Inception Distance)
 FID mierzy odległość statystyczną między cechami obrazów rzeczywistych a obrazów generowanych, wyekstrahowanymi przez sieć Inception v3. Z przedostatniej warstwy tej sieci pobierane są wektory cech reprezentujące wysokopoziomowe właściwości obrazów (np. układ oczu, kształt twarzy, obecność okularów)
@@ -102,6 +102,10 @@ Im niższy wynik FID, tym lepsza jakość oraz większe podobieństwo generowany
     Zalety: 
     - Uwzględnia zarówno jakość obrazu, jak i różnorodność.
     - Dobrze koreluje z oceną wizualną człowieka
+
+    Wady:
+    - Zakłada rozkład normalny cech.
+    - Nie rozróżnia artefaktów lokalnych, bo bazuje na globalnych statystykach. Może nie wychwycić drobnych defektów jak np. dziwnie wyglądające oczy lub tło.
 
     Interpretacja: 
     - FID bliski 0 oznacza, że obrazy syntetyczne są niemal nie do odróżnienia od rzeczywistych.
@@ -114,11 +118,29 @@ IS bazując na sieci Inception v3 sprawdza czy model spełnia dwie główne zasa
 
     Zalety: 
     - Szybkość. IS wymaga tylko przejścia wygenerowanych obrazów przez sieć.
-    - 
+    - Jeśli GAN generuje obrazy z różnych klas (np. psy, koty, auta) – IS dobrze pokazuje zarówno ich wyrazistość, jak i różnorodność.
+
+    Wady:
+    - Może dawać niski wynik, gdy sieć klasyfikująca nie rozpozna obrazów jako różnych klas (np. w naszym przypadku generowania twarzy).
+    - Nie zawsze wykrywa „mode collapse” (jeśli model generuje ten sam obraz o różnych wariantach koloru – IS może być nadal wysoki).
 
     Interpretacja: 
     - Im wyższy wynik IS, tym lepsza jakość i różnorodność obrazów. Niska wartość może świadczyć o powtarzalnych lub niskiej jakości generacjach.
 
-Obie metryki zostały zastosowane po zakończeniu procesu uczenia modelu, umożliwiając obiektywną ocenę postępów, porównanie wariantów architektury oraz analizę wpływu modyfikacji takich jak zastosowanie Wasserstein GAN czy technik augmentacji danych.
+3. MS-SSIM (Multi-Scale Structural Similarity Index)
+MS-SSIM mierzy strukturalne podobieństwo między parami obrazów przy wykorzystaniu informacji o jasności, kontraście i strukturze, ale w wielu skalach przestrzennych (rozdzielczościach). W kontekście GAN-ów, MS-SSIM służy do oceny różnorodności generowanych obrazów — im niższa wartość MS-SSIM, tym większa różnorodność próbek, ponieważ oznacza to, że obrazy są mniej do siebie podobne.
 
-  
+    Zalety: 
+    - Umożliwia ocenę różnorodności generowanych obrazów niezależnie od porównania z rzeczywistymi danymi.
+    - Metryka jest wrażliwa na drobne zmiany strukturalne, co pozwala wykrywać zjawisko tzw. mode collapse (czyli generowania niemal identycznych obrazów przez GAN).
+    - Szybka w obliczaniu i nie wymaga zaawansowanych ekstraktorów cech.
+
+    Wady:
+    - Metryka ocenia tylko jak bardzo obrazy są różne od siebie - nie sprawdza czy są realistyczne i dobrej jakości.
+    - Wynik MS-SSIM zależy od liczby i sposobu losowania par obrazów do porównania. Zbyt mała liczba par może prowadzić do niestabilnych lub niewiarygodnych wyników.
+
+    Interpretacja: 
+    - MS-SSIM bliski 0 oznacza, że generowane obrazy są różnorodne, GAN generuje szeroki wachlarz przykładów.
+    - MS-SSIM powyżej 0.5 wskazuje na duże podobieństwo między próbkami.
+
+Metryki zostały zastosowane po zakończeniu procesu uczenia modelu, umożliwiając obiektywną ocenę postępów, porównanie wariantów architektury oraz analizę wpływu modyfikacji takich jak zastosowanie Wasserstein GAN czy technik augmentacji danych.
