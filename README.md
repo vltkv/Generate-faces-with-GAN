@@ -9,9 +9,7 @@
 ## Opis projektu
 
 ### Cele projektowe:
-Celem projektu jest stworzenie modelu opartego na sieci generatywnej GAN (Generative Adversarial Network), któego zadaniem jest generowanie syntetycznych obrazów twarzy o wysokiej jakości.
-
-WGAN, czyli Wasserstein GAN, to wariant klasycznego GAN-a (Generative Adversarial Network), który poprawia stabilność trenowania i jakość generowanych danych poprzez zmianę sposobu, w jaki mierzona jest odległość między rozkładami danych rzeczywistych i generowanych.
+Celem projektu jest stworzenie modelu opartego na sieci generatywnej GAN (Generative Adversarial Network), którego zadaniem jest generowanie syntetycznych obrazów twarzy o wysokiej jakości.
 
 Główne cele:
 - Implementacja modelu bazując na architekturze DCGAN (Deep Convolutional GAN), która łączy klasyczne założenia GAN-ów z sieciami konwolucyjnymi, oraz WGAN (Wasserstein GAN), która poprawia stabilność trenowania poprzez zmianę sposobu w jaki mierzona jest odległość między rozkładami danych rzeczywistych i generowanych.
