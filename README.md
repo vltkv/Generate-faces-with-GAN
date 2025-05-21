@@ -146,3 +146,7 @@ MS-SSIM mierzy strukturalne podobieństwo między parami obrazów przy wykorzyst
     - MS-SSIM powyżej 0.5 wskazuje na duże podobieństwo między próbkami.
 
 Metryki zostały zastosowane po zakończeniu procesu uczenia modelu, umożliwiając obiektywną ocenę postępów, porównanie wariantów architektury oraz analizę wpływu modyfikacji takich jak zastosowanie Wasserstein GAN czy technik augmentacji danych.
+
+Modele, wyniki i porównania są odpowiednich treningów są widoczne w folderach [gan-results](/gan-results/), [wgan-results](/wgan-results/).
+
+Dokładną dokumentację uruchamiania można zobaczyć [tutaj](docs/how-to-run.md).
