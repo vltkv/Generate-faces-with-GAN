@@ -34,7 +34,8 @@ Główne cele:
 Tworzenie realistycznych anonimowych wizerunków twarzy bez naruszania prywatności — np. do zastosowań w grach komputerowych, filmach, reklamach, sztuce cyfrowej czy testowaniu systemów rozpoznawania twarzy.
 
 # Analiza systemowa
-
+## Uruchamianie projektu
+Dokładną dokumentację uruchamiania można zobaczyć [tutaj](docs/how-to-run.md).
 ## Diagram czynności
 ![Diagram czynności](docs/diagrams/activity_diagram.png)
 ## Diagram sekwencji
@@ -54,6 +55,8 @@ Tworzenie realistycznych anonimowych wizerunków twarzy bez naruszania prywatno�
 | VIII | 16.05.2025 | Ewaluacja i analiza wyników                                                          | Alicja Wojciechowska                 |
 | IX   | 19.05.2025 | Dokumentacja projektu                                                                | Alicja Wojciechowska, Weronika Żygis |
 
+## Użycie narzędzi do programowania zespołowego
+W ramach zespołowego podejścia do projektowania i wdrażania modelu generatywnego (DCGAN) wykorzystano narzędzia wspierające współpracę programistyczną, takie jak Git i GitHub, co umożliwiło śledzenie zmian, przypisywanie zadań oraz wspólne rozwijanie kodu. Dodatkowo, w celu skutecznego zarządzania pracą zespołu, zastosowano metodę Kanban, która umożliwiła przejrzyste planowanie, monitorowanie postępów oraz elastyczne reagowanie na napotykane trudności.
 
 # Projekt architektury
 
@@ -89,9 +92,6 @@ Nie dotyczy – projekt nie korzysta z klasycznej relacyjnej bazy danych. Dane w
 ![Diagram komponentów](docs/diagrams/component_diagram.png)
 ## Diagram klas
 ![Diagram klas](docs/diagrams/class_diagram.png)
-
-## Użycie narzędzi do programowania zespołowego
-W ramach zespołowego podejścia do projektowania i wdrażania modelu generatywnego (DCGAN) wykorzystano narzędzia wspierające współpracę programistyczną, takie jak Git i GitHub, co umożliwiło śledzenie zmian, przypisywanie zadań oraz wspólne rozwijanie kodu. Dodatkowo, w celu skutecznego zarządzania pracą zespołu, zastosowano metodę Kanban, która umożliwiła przejrzyste planowanie, monitorowanie postępów oraz elastyczne reagowanie na napotykane trudności.
 
 # Ewaluacja wyników
 ## Metryki
@@ -148,5 +148,3 @@ MS-SSIM mierzy strukturalne podobieństwo między parami obrazów przy wykorzyst
 Metryki zostały zastosowane po zakończeniu procesu uczenia modelu, umożliwiając obiektywną ocenę postępów, porównanie wariantów architektury oraz analizę wpływu modyfikacji takich jak zastosowanie Wasserstein GAN czy technik augmentacji danych.
 
 Modele, wyniki i porównania są odpowiednich treningów są widoczne w folderach [gan-results](/gan-results/), [wgan-results](/wgan-results/).
-
-Dokładną dokumentację uruchamiania można zobaczyć [tutaj](docs/how-to-run.md).
