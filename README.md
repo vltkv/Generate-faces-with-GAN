@@ -111,12 +111,12 @@ Im niższy wynik FID, tym lepsza jakość oraz większe podobieństwo generowany
 
     Interpretacja: 
     - FID bliski 0 oznacza, że obrazy syntetyczne są niemal nie do odróżnienia od rzeczywistych.
-    - FID powyżej 50-100 sugeruje, że model generuje obrazy słabej jakości lub z dużymi różnicami względem danych rzeczywistych.
+    - wysoki FID sugeruje, że model generuje obrazy słabej jakości lub z dużymi różnicami względem danych rzeczywistych.
 
 2. IS (Inception Score)
 IS bazując na sieci Inception v3 sprawdza czy model spełnia dwie główne zasady:
 - Generowany obraz jest wyraźny i realistyczny. To znaczy, że klasyfikator (Inception v3) z wysokim prawdopodobieństwem przypisuje obraz do danej klasy (jest pewny tego co widzi).
-- Zbiór obrazów jest zróżnicowany. Model powinien generować twarze o różnych cechach (a nie np. tylko twarze z okularami i wąskimi twarzami)
+- Zbiór obrazów jest zróżnicowany. 
 
     Zalety: 
     - Szybkość. IS wymaga tylko przejścia wygenerowanych obrazów przez sieć.
