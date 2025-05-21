@@ -98,7 +98,7 @@ FID mierzy odległość statystyczną między cechami obrazów rzeczywistych a o
 Im niższy wynik FID, tym lepsza jakość oraz większe podobieństwo generowanych obrazów do prawdziwych danych.
 
     Zalety: 
-    - Uwzględnia zarówno jakość obrazu, jak i różnorodność.
+    - Uwzględnia zarówno jakość obrazu, jak i podobieństwo do rzeczywistych danych.
     - Dobrze koreluje z oceną wizualną człowieka
 
     Wady:
