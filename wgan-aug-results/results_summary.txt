@@ -1,0 +1,42 @@
+GAN TRAINING RESULTS SUMMARY
+===========================
+
+TRAINING DETAILS
+--------------
+dataroot: ./data/celeba
+batch_size: 128
+image_size: 64
+num_epochs: 5
+lr: 0.0002
+seed: 999
+output_dir: results
+use_kagglehub: True
+max_images: 200000
+augment: False
+wgan: True
+ngpu: 1
+nz: 100
+beta1: 0.5
+n_critic: 5
+clip_value: 0.01
+
+FINAL LOSSES
+-----------
+Final Generator Loss: 0.0117
+Final Discriminator Loss: -0.5167
+
+MODEL EVALUATION METRICS
+------------------------
+FID Score: 114.5919 (lower is better)
+Inception Score: 1.7855 ± 0.3162 (higher is better)
+MS-SSIM (avg over 100 pairs): 0.1249 (lower = more diversity)
+LPIPS (avg over 100 pairs): 0.6105 (higher = more diversity)
+
+RESULTS LOCATION
+---------------
+Loss Plot: results/loss_plot.png
+Comparison Grid: results/comparison.png
+Individual Real Images: results/individual_real (64 images)
+Individual Generated Images: results/individual_fake (64 images)
+Generator Model: results/generator.pth
+Discriminator Model: results/discriminator.pth
