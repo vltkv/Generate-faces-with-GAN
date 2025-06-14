@@ -32,6 +32,8 @@ def main():
     parser.add_argument('--max_images', type=int, default=200000, help='maximum number of images to use (KaggleHub only)')
     parser.add_argument('--augment', action='store_false', help='apply data augmentation')
     parser.add_argument('--wgan', action='store_true', help='use Wasserstein GAN')
+    parser.add_argument('--use_mixup', action='store_true', help='use MixUp augmentation')
+    parser.add_argument('--mixup_alpha', type=float, default=0.2, help='MixUp alpha parameter')
     opt = parser.parse_args()
     
     opt.ngpu = 1  # 1 GPU
@@ -117,7 +119,8 @@ def main():
         # Standard GAN
         G_losses, D_losses, img_list = train_gan(
             dataloader, netG, netD, optimizerG, optimizerD, criterion,
-            opt.num_epochs, device, opt.nz, fixed_noise
+            opt.num_epochs, device, opt.nz, fixed_noise,
+            use_mixup=opt.use_mixup, mixup_alpha=opt.mixup_alpha
         )
     
     real_batch = next(iter(dataloader))
