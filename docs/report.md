@@ -35,7 +35,7 @@
 
 ### Analiza wyników
 
-*### Metryki używane do oceny modeli
+#### Metryki używane do oceny modeli
 
 - FID Score (Fréchet Inception Distance) - im niższy, tym lepszy
 - Inception Score - im wyższy, tym lepszy
@@ -69,7 +69,7 @@
 
 ## 2. Uzasadnienie Wyboru Techniki/Modelu
 
-Wybór architektury GAN został podyktowany następującymi czynnikami:
+Wybór architektury GAN (DCGAN) został podyktowany następującymi czynnikami:
 
 - Zdolność do generowania realistycznych obrazów twarzy
 - Możliwość uczenia się rozkładu danych bez konieczności modelowania gęstości prawdopodobieństwa
@@ -112,9 +112,8 @@ Projekt wykorzystuje zbiór danych CelebA, który zawiera:
 
 1. Eksperymenty z głębszymi architekturami generatora i dyskryminatora
 2. Implementacja dodatkowych technik stabilizacji uczenia (np. gradient penalty)
-3. Zwiększenie liczby epok treningu
-4. Testowanie różnych wartości learning rate
-5. Eksperymenty z różnymi technikami augmentacji danych
+3. Testowanie różnych wartości learning rate
+4. Eksperymenty z różnymi technikami augmentacji danych
 
 ### Wnioski:
 
