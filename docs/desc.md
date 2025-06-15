@@ -44,11 +44,11 @@ W projekcie wykorzystujemy DCGAN:
 
 # Analiza systemowa
 ## Uruchamianie projektu
-Dokładną dokumentację uruchamiania można zobaczyć [tutaj](docs/how-to-run.md).
+Dokładną dokumentację uruchamiania można zobaczyć [tutaj](how-to-run.md).
 ## Diagram czynności
-![Diagram czynności](docs/diagrams/activity_diagram.png)
+![Diagram czynności](diagrams/activity_diagram.png)
 ## Diagram sekwencji
-![Diagram sekwencji](docs/diagrams/sequence_diagram.png)
+![Diagram sekwencji](diagrams/sequence_diagram.png)
 ## Podział prac i etapy wykonania projektu
 | Etap | Data       | Nazwa elementu projektu                                                              | Odpowiedzialna                       |
 |------|------------|--------------------------------------------------------------------------------------|--------------------------------------|
@@ -85,9 +85,9 @@ W ramach zespołowego podejścia do projektowania i wdrażania modelu generatywn
 Nie dotyczy – projekt nie korzysta z klasycznej relacyjnej bazy danych. Dane wejściowe (obrazy) są przechowywane jako pliki w systemie plików.
 
 ## Diagram komponentów
-![Diagram komponentów](docs/diagrams/component_diagram.png)
+![Diagram komponentów](diagrams/component_diagram.png)
 ## Diagram klas
-![Diagram klas](docs/diagrams/class_diagram.png)
+![Diagram klas](diagrams/class_diagram.png)
 
 # Ewaluacja wyników
 ## Metryki
@@ -143,4 +143,4 @@ MS-SSIM mierzy strukturalne podobieństwo między parami obrazów przy wykorzyst
 
 Metryki zostały zastosowane po zakończeniu procesu uczenia modelu, umożliwiając obiektywną ocenę postępów, porównanie wariantów architektury oraz analizę wpływu modyfikacji takich jak zastosowanie Wasserstein GAN czy technik augmentacji danych.
 
-Modele, wyniki i porównania są odpowiednich treningów są widoczne w folderach [gan-results](/gan-results/), [wgan-results](/wgan-results/).
+Modele, wyniki i porównania są odpowiednich treningów są widoczne w folderach [gan-results](/results/gan-results/), [wgan-results](/results/wgan-results/).
