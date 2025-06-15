@@ -15,25 +15,34 @@
 
 #### Standardowy GAN
 
-![Loss Plot - Standard GAN](results/gan-results/loss_plot.png)
-![Comparison - Standard GAN](results/gan-results/comparison.png)
+![Loss Plot - Standard GAN](/results/gan-results/loss_plot.png)
+![Comparison - Standard GAN](/results/gan-results/comparison.png)
 
 #### WGAN
 
-![Loss Plot - WGAN](results/wgan-results/loss_plot.png)
-![Comparison - WGAN](results/wgan-results/comparison.png)
+![Loss Plot - WGAN](/results/wgan-results/loss_plot.png)
+![Comparison - WGAN](/results/wgan-results/comparison.png)
 
 #### WGAN z Augmentacją
 
-![Loss Plot - WGAN Aug](results/wgan-aug-results/loss_plot.png)
-![Comparison - WGAN Aug](results/wgan-aug-results/comparison.png)
+![Loss Plot - WGAN Aug](/results/wgan-aug-results/loss_plot.png)
+![Comparison - WGAN Aug](/results/wgan-aug-results/comparison.png)
 
 #### GAN z MixUp
 
-![Loss Plot - GAN MixUp](results/mixup-results/loss_plot.png)
-![Comparison - GAN MixUp](results/mixup-results/comparison.png)
+![Loss Plot - GAN MixUp](/results/mixup-results/loss_plot.png)
+![Comparison - GAN MixUp](/results/mixup-results/comparison.png)
 
 ### Analiza wyników
+
+*### Metryki używane do oceny modeli
+
+- FID Score (Fréchet Inception Distance) - im niższy, tym lepszy
+- Inception Score - im wyższy, tym lepszy
+- MS-SSIM (Multi-Scale Structural Similarity) - mierzy różnorodność
+- LPIPS (Learned Perceptual Image Patch Similarity) - mierzy różnorodność
+- Funkcja straty generatora (G_losses)
+- Funkcja straty dyskryminatora (D_losses)**
 
 1. **FID Score (Fréchet Inception Distance)**
 
@@ -58,31 +67,6 @@
    - Standard GAN i GAN z MixUp miały wyższe wartości funkcji straty generatora
    - WGAN osiągnął ujemne wartości funkcji straty dyskryminatora, co jest oczekiwane dla tej architektury
 
-### Dostępne warianty i parametry
-
-Projekt można uruchomić z różnymi parametrami, między innymi:
-
-- Użycie architektury Wasserstein GAN
-- Użycie standardowych augmentacji
-- Użycie augmentacji MixUp
-- Różne rozmiary batcha
-- Różne rozmiary obrazów treningowych
-- Różne learning rate
-- Różna liczba epok
-- Różne ścieżki wejścia/wyników
-- Ograniczenie zbioru treningowego
-- Możliwość włączenia augmentacji danych
-- Możliwość użycia KaggleHub do pobrania danych
-
-### Metryki używane do oceny modeli
-
-- FID Score (Fréchet Inception Distance) - im niższy, tym lepszy
-- Inception Score - im wyższy, tym lepszy
-- MS-SSIM (Multi-Scale Structural Similarity) - mierzy różnorodność
-- LPIPS (Learned Perceptual Image Patch Similarity) - mierzy różnorodność
-- Funkcja straty generatora (G_losses)
-- Funkcja straty dyskryminatora (D_losses)
-
 ## 2. Uzasadnienie Wyboru Techniki/Modelu
 
 Wybór architektury GAN został podyktowany następującymi czynnikami:
@@ -105,12 +89,6 @@ Dane zostały podzielone w następujący sposób:
 - Zbiór walidacyjny: 10% danych
 - Zbiór testowy: 10% danych
 
-Wykorzystano augmentację danych, w tym:
-
-- MixUp (opcjonalnie)
-- Standardowe transformacje obrazów
-- Normalizację danych
-
 ## 4. Opis Danych Wejściowych
 
 Projekt wykorzystuje zbiór danych CelebA, który zawiera:
@@ -124,10 +102,11 @@ Projekt wykorzystuje zbiór danych CelebA, który zawiera:
 
 ### Wnioski z wyników:
 
-1. WGAN osiągnął najlepsze wyniki w większości metryk
-2. FID Score jest wciąż wysoki (>100) dla wszystkich wariantów, co wskazuje na znaczną różnicę między generowanymi a prawdziwymi obrazami
-3. Inception Score jest niski (<2) dla wszystkich wariantów, co sugeruje, że generowane obrazy nie są wystarczająco realistyczne
-4. MS-SSIM i LPIPS wskazują na umiarkowaną różnorodność generowanych obrazów
+1. Zdjęcia wygenerowane przez standardowy GAN wyglądają najlepiej
+2. WGAN osiągnął najlepsze wyniki w większości metryk
+3. FID Score jest wciąż wysoki (>100) dla wszystkich wariantów, co wskazuje na znaczną różnicę między generowanymi a prawdziwymi obrazami
+4. Inception Score jest niski (<2) dla wszystkich wariantów, co sugeruje, że generowane obrazy nie są wystarczająco realistyczne
+5. MS-SSIM i LPIPS wskazują na umiarkowaną różnorodność generowanych obrazów
 
 ### Propozycje dalszych kroków:
 
