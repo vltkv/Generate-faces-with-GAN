@@ -6,3 +6,6 @@ Dokładną instrukcję uruchamiania można zobaczyć [tutaj](/docs/how-to-run.md
 
 ## Zależności
 Lista wszystkich zależności projektu znajduje się w pliku [requirements.txt](/requirements.txt)
+
+## Raport
+Jest dostępny [tutaj](/docs/report.md)

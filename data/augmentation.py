@@ -3,7 +3,8 @@ import torchvision.transforms as transforms
 
 def get_training_augmentation(image_size=64, apply_prob=0.5):
     """
-    Returns transforms with augmentations for GAN training
+    Spatial: RandimHorizontalFlip, random rotation +- 10 deg, RandomAffine (przesuniecie)
+    Resizing and cropping, Color and intensity transformations, Add random noise
     
     Args:
         image_size: Size of the output images
